@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 
 export default function LoginPage(): React.ReactElement {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">로그인</h1>
+    <div className="min-h-screen flex items-center justify-center bg-purple-50">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md border border-purple-100">
+        <h1 className="text-2xl font-bold mb-6 text-center text-purple-900">로그인</h1>
         <LoginForm />
       </div>
     </div>
