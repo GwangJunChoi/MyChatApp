@@ -4,6 +4,7 @@ import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { sendLoginLink, checkEmailLink as isEmailLink, signInWithEmail } from '@/lib/firebase';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { goToMain } from '@/utils/navigation';
 
 interface LoginFormState {
   email: string;
@@ -27,9 +28,18 @@ export default function LoginForm(): React.ReactElement {
     message: ''
   });
 
+  // 이미 로그인한 사용자는 메인 페이지로 리다이렉트
+  useEffect(() => {
+    if (user) {
+      goToMain(router);
+    }
+  }, [user, router]);
+
   const actionCodeSettings: ActionCodeSettingsType = {
-    url: typeof window !== 'undefined' ? window.location.href : '',
-    handleCodeInApp: true,
+    url: typeof window !== 'undefined'
+      ? `${window.location.origin}/auth/callback`
+      : '',
+    handleCodeInApp: false,
   };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -74,7 +84,7 @@ export default function LoginForm(): React.ReactElement {
         try {
           await signInWithEmail(email, window.location.href);
           window.localStorage.removeItem('emailForSignIn');
-          router.push('/chat');
+          goToMain(router);
         } catch (error) {
           console.error('Email link sign in error:', error);
           setFormState(prev => ({
@@ -89,14 +99,6 @@ export default function LoginForm(): React.ReactElement {
   useEffect(() => {
     checkEmailLink();
   }, []);
-
-  // 이미 로그인한 사용자는 채팅 페이지로 리다이렉트
-  useEffect(() => {
-    if (user) {
-      console.log(user);
-      // router.push('/chat');
-    }
-  }, [user, router]);
 
   // 로딩 중일 때 표시할 UI
   if (loading) {
