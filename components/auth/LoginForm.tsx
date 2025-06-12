@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { sendLoginLink, checkEmailLink as isEmailLink, signInWithEmail } from '@/lib/firebase';
+import { sendLoginLink } from '@/lib/firebase';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { goToMain } from '@/utils/navigation';
 
@@ -19,7 +19,7 @@ interface ActionCodeSettingsType {
 }
 
 export default function LoginForm(): React.ReactElement {
-  const { user, loading, isAuthenticated } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const router = useRouter();
   const [formState, setFormState] = useState<LoginFormState>({
     email: '',
@@ -50,6 +50,17 @@ export default function LoginForm(): React.ReactElement {
     e.preventDefault();
     setFormState(prev => ({ ...prev, error: '', message: '', loading: true }));
 
+    // 이메일 유효성 검사
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formState.email)) {
+      setFormState(prev => ({
+        ...prev,
+        error: '유효한 이메일 주소를 입력해주세요',
+        loading: false
+      }));
+      return;
+    }
+
     try {
       await sendLoginLink(formState.email, actionCodeSettings);
 
@@ -69,36 +80,6 @@ export default function LoginForm(): React.ReactElement {
       setFormState(prev => ({ ...prev, loading: false }));
     }
   };
-
-  const checkEmailLink = async (): Promise<void> => {
-    if (typeof window === 'undefined') return;
-
-    if (isEmailLink(window.location.href)) {
-      let email = window.localStorage.getItem('emailForSignIn');
-
-      if (!email) {
-        email = window.prompt('이메일을 입력해주세요.') || '';
-      }
-
-      if (email) {
-        try {
-          await signInWithEmail(email, window.location.href);
-          window.localStorage.removeItem('emailForSignIn');
-          goToMain(router);
-        } catch (error) {
-          console.error('Email link sign in error:', error);
-          setFormState(prev => ({
-            ...prev,
-            error: '로그인에 실패했습니다. 다시 시도해주세요.'
-          }));
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    checkEmailLink();
-  }, []);
 
   // 로딩 중일 때 표시할 UI
   if (loading) {
