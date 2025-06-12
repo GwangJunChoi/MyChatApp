@@ -19,7 +19,6 @@ MyChatApp은 **Next.js**, **Firebase**, **Tailwind CSS**로 만든 실시간 채
   - **Authentication** – Google OAuth 로그인
   - **Firestore** – 실시간 데이터베이스
 - **Tailwind CSS** – 유틸리티 기반 CSS 프레임워크
-- **Vercel** – 배포 플랫폼
 
 <br/>
 
@@ -96,8 +95,8 @@ my-chat-app/
 1. 프로젝트 클론
 
 ```bash
-git clone https://github.com/your-username/mychatapp.git
-cd mychatapp
+git clone https://github.com/GwangJunChoi/MyChatApp.git
+cd MyChatApp
 ```
 2. 패키지 설치
 ```bash
@@ -125,6 +124,6 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 
 ## 🙋‍♂️ 개발자
 
-- **이름**: 홍길동
-- **GitHub**: [https://github.com/your-id](https://github.com/your-id)
+- **이름**: 최광준
+- **GitHub**: [https://github.com/GwangJunChoi](https://github.com/GwangJunChoi)
 ---
