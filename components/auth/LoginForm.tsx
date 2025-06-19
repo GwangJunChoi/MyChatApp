@@ -39,7 +39,7 @@ export default function LoginForm(): React.ReactElement {
     url: typeof window !== 'undefined'
       ? `${window.location.origin}/auth/callback`
       : '',
-    handleCodeInApp: false,
+    handleCodeInApp: true,
   };
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
