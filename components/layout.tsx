@@ -21,14 +21,6 @@ export default function Layout({ children }: { children: ReactNode }): ReactNode
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-purple-50">
-        {children}
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen w-screen">
       {/* Sidebar */}
@@ -64,13 +56,24 @@ export default function Layout({ children }: { children: ReactNode }): ReactNode
             <h1 className="text-lg font-semibold text-purple-900">MyChatApp</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <span className="text-sm text-purple-600">{user?.email}</span>
-            <button
-              onClick={handleLogout}
-              className="text-sm text-purple-600 hover:text-purple-800 transition-colors"
-            >
-              Logout
-            </button>
+            {isAuthenticated ? (
+              <>
+                <span className="text-sm text-purple-600">{user?.email}</span>
+                <button
+                  onClick={handleLogout}
+                  className="text-sm text-purple-600 hover:text-purple-800 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => goToLogin(router)}
+                className="text-sm text-purple-600 hover:text-purple-800 transition-colors"
+              >
+                Login
+              </button>
+            )}
           </div>
         </header>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { checkEmailLink as isEmailLink, signInWithEmail } from '@/lib/firebase';
 import { goToMain } from '@/utils/navigation';
@@ -9,10 +9,13 @@ export default function AuthCallbackPage(): React.ReactElement {
   const router = useRouter();
   const [error, setError] = useState<string>('');
   const [isProcessing, setIsProcessing] = useState(true);
+  const processedRef = useRef(false); // 중복 실행 방지
 
   useEffect(() => {
     const processAuth = async (): Promise<void> => {
       if (typeof window === 'undefined') return;
+      if (processedRef.current) return; // 이미 처리했으면 실행하지 않음
+      processedRef.current = true;
 
       if (isEmailLink(window.location.href)) {
         let email = window.localStorage.getItem('emailForSignIn');
